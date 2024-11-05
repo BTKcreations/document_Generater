@@ -89,7 +89,7 @@ function App() {
           <FormProvider {...methods}>
             <form
               onSubmit={handleSubmit(onSubmit)}
-              className={`bg-white rounded-2xl shadow-xl p-8 h-full flex flex-col ${
+              className={`bg-white rounded-2xl shadow-xl p-8 h-full flex flex-col justify-between ${
                 showForm || !submitted ? 'block' : 'hidden' // Conditional display for small screens
               } lg:block`}
             >
@@ -127,7 +127,7 @@ function App() {
                 </motion.div>
               </AnimatePresence>
 
-              <div className="flex justify-between mt-8">
+              <div className="flex justify-between mt-8 flex-wrap gap-5">
                 {step > 1 && (
                   <button
                     type="button"
