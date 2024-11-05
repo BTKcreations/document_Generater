@@ -10,6 +10,8 @@ function StepThree() {
     'DevOps',
     'AI/ML',
     'Blockchain',
+    'Android Development',
+    'UI/UX'
   ];
 
   return (
