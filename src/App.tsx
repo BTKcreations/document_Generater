@@ -129,7 +129,7 @@ function formatInterests(interests) {
           .replace('Project Requirements', 'What You Need');
         break;
       case 'concise':
-        response = response.split('\n').filter(line => line.trim() !== '').slice(0, 5).join('\n');
+        response = response.split('\n').filter(line => line.trim() !== '').slice(0, 6).join('\n');
         break;
       case 'casual':
         response = response.replace('Form Submission Summary', 'Here’s the lowdown on your submission:')
