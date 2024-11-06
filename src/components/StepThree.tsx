@@ -1,18 +1,55 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 function StepThree() {
-  const { register } = useFormContext();
+  const { register, setValue } = useFormContext();
+  
   const interests = [
-    'Web Development',
-    'Mobile Development',
-    'Cloud Computing',
-    'DevOps',
-    'AI/ML',
-    'Blockchain',
-    'Android Development',
-    'UI/UX'
+    { name: 'Web Development', subcategories: ['Frontend', 'Backend', 'Full Stack'] },
+    { name: 'Mobile Development', subcategories: ['iOS', 'Android'] },
+    { name: 'Cloud Computing', subcategories: ['AWS', 'Azure', 'Google Cloud'] },
+    { name: 'DevOps', subcategories: [] },
+    { name: 'AI/ML', subcategories: ['Machine Learning', 'Deep Learning'] },
+    { name: 'Blockchain', subcategories: [] },
+    { name: 'Android Development', subcategories: [] },
+    { name: 'UI/UX', subcategories: [] }
   ];
+
+  const [selectedInterests, setSelectedInterests] = useState({});
+
+  const handleCategoryChange = (category) => {
+    const isSelected = !selectedInterests[category];
+    const newSelectedInterests = { ...selectedInterests, [category]: isSelected };
+
+    // Update subcategories based on category selection
+    if (isSelected) {
+      interests.find(interest => interest.name === category).subcategories.forEach(sub => {
+        newSelectedInterests[sub] = true;
+      });
+    } else {
+      interests.find(interest => interest.name === category).subcategories.forEach(sub => {
+        newSelectedInterests[sub] = false;
+      });
+    }
+
+    setSelectedInterests(newSelectedInterests);
+    setValue('interests', Object.keys(newSelectedInterests).filter(key => newSelectedInterests[key]));
+  };
+
+  const handleSubcategoryChange = (subcategory) => {
+    const isSelected = !selectedInterests[subcategory];
+    const newSelectedInterests = { ...selectedInterests, [subcategory]: isSelected };
+
+    // Check if all subcategories are selected to select the main category
+    const category = interests.find(interest => interest.subcategories.includes(subcategory));
+    if (category) {
+      const allSelected = category.subcategories.every(sub => newSelectedInterests[sub]);
+      newSelectedInterests[category.name] = allSelected;
+    }
+
+    setSelectedInterests(newSelectedInterests);
+    setValue('interests', Object.keys(newSelectedInterests).filter(key => newSelectedInterests[key]));
+  };
 
   return (
     <div className="space-y-6">
@@ -22,18 +59,32 @@ function StepThree() {
         </label>
         <div className="grid grid-cols-2 gap-4">
           {interests.map((interest) => (
-            <label
-              key={interest}
-              className="flex items-center space-x-2 cursor-pointer"
-            >
-              <input
-                type="checkbox"
-                value={interest}
-                {...register('interests')}
-                className="w-4 h-4 text-blue-500 border-gray-300 rounded focus:ring-blue-500"
-              />
-              <span className="text-sm text-gray-700">{interest}</span>
-            </label>
+            <div key={interest.name}>
+              <label className="flex items-center space-x-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={selectedInterests[interest.name] || false}
+                  onChange={() => handleCategoryChange(interest.name)}
+                  className="w-4 h-4 text-blue-500 border-gray-300 rounded focus:ring-blue-500"
+                />
+                <span className="text-sm text-gray-700">{interest.name}</span>
+              </label>
+              {interest.subcategories.length > 0 && (
+                <div className="ml-6">
+                  {interest.subcategories.map((subcategory) => (
+                    <label key={subcategory} className="flex items-center space-x-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={selectedInterests[subcategory] || false}
+                        onChange={() => handleSubcategoryChange(subcategory)}
+                        className="w-4 h-4 text-blue-500 border-gray-300 rounded focus:ring-blue-500"
+                      />
+                      <span className="text-sm text-gray-600">{subcategory}</span>
+                    </label>
+                  ))}
+                </div>
+              )}
+            </div>
           ))}
         </div>
       </div>
@@ -48,7 +99,7 @@ function StepThree() {
         <select
           id="experience"
           {...register('experience', { required: true })}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          className="w-full px-4 py-2 border border-gray-300 rounded -lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         >
           <option value="">Select experience</option>
           <option value="0-2">0-2 years</option>
