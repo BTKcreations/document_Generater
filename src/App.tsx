@@ -296,13 +296,13 @@ function formatInterests(interests) {
             <div className="mb-4 flex gap-3 items-center">
               <label className="block text-gray-700 text-xl font-bold mb-2">Select Tone:</label>
               <select
-              defaultValue={"default"}
+                defaultValue={"default"}
                 value={tone}
                 onChange={(e) => setTone(e.target.value)}
                 className="block appearance-none  bg-white border border-gray-300 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
               >
                 
-                <option value="default">Choose your Tone</option>
+                <option value="">Choose your Tone</option>
                 <option value="friendly">Friendly</option>
                 <option value="professional">Professional</option>
                 <option value="concise">Concise</option>
